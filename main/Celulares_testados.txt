@@ -1,0 +1,14 @@
+Testados em 20/01/2023 com xBTSAT v1.1
+    - Poco X3 PRO
+    - MOTO G20
+    - Moto E20
+    - Galaxy J2 Core 
+    - Galaxy A01 Core
+    - Moto e5 play
+    - Moto e6 play
+    - Moto G xt1032
+
+Reportado problema:
+    - MOTO E7
+    - E6 Play
+    - A03 core

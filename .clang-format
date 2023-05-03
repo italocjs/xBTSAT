@@ -1,0 +1,13 @@
+---
+# options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+BasedOnStyle: Google
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 180
+AlignTrailingComments: true
+SpacesBeforeTrailingComments: 4
+#IndentPPDirectives: BeforeHash
+IndentPPDirectives: None
+BreakBeforeBraces: Allman
+UseTab: ForIndentation
+SortIncludes: false
