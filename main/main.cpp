@@ -265,7 +265,7 @@ void callback_ESP_BT(const uint8_t *buffer, size_t size)
 	// inData.replace("\r", "");
 	// inData.replace("\n", "");
 	char rxbuff[256];
-	snprintf(rxbuff, size, "%s", (char *)buffer);
+	snprintf(rxbuff, size+1, "%s", (char *)buffer); //Without the +1 it was missing CRLF
 
 #ifdef DEBUG_COMMAND_PROCESSOR
 	ESP_LOGI("", "Sending to queue_bluetooth: %s", rxbuff);
