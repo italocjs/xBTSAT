@@ -2,10 +2,11 @@
  * @file main.c
  * @author Italo Soares (italo.soares@simova.com.br / italocjs@live.com)
  * @brief Example and development settings. no specific usage intended
- * @version 1.2
+ * @version Firmware v1.3 RELEASED ON 08/05/2023
  * @date
  * 2023-05-01 22:36:03 - Begin of date keeping.
  * 2023-05-01 22:36:11 - Adding AT commands
+ * 2023-05-08 00:13:52 - Last review, code has been published to 40 xBTSAT.
  *
  * @copyright Copyright (c) 2023
  * tasks: echo_task
@@ -265,7 +266,7 @@ void callback_ESP_BT(const uint8_t *buffer, size_t size)
 	// inData.replace("\r", "");
 	// inData.replace("\n", "");
 	char rxbuff[256];
-	snprintf(rxbuff, size+1, "%s", (char *)buffer); //Without the +1 it was missing CRLF
+	snprintf(rxbuff, size + 1, "%s", (char *)buffer);    // Without the +1 it was missing CRLF
 
 #ifdef DEBUG_COMMAND_PROCESSOR
 	ESP_LOGI("", "Sending to queue_bluetooth: %s", rxbuff);
@@ -512,6 +513,6 @@ extern "C" void app_main(void)
 
 	char btname[15];
 	snprintf(btname, sizeof(btname), "xBTSAT_%d", getchipID());
-	ESP_LOGI("", "%s initialized - Version is %s, uart2 baud_rate is %d", btname, firmware_version, current_baud_rate);
+	Serial.printf("%s initialized - Version is %s, uart2 baud_rate is %d", btname, firmware_version, current_baud_rate);
 	system_status = 0;
 }
