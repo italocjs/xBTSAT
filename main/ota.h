@@ -20,9 +20,9 @@
 #define OTA_TAG "OTA_TAG"
 bool ota_started = false;
 
-const char *host = "esp32";
-const char *ssid;    // = "xBTSAT_OTA";
-const char *password = "12345678";
+extern const char *host;
+extern const char *ssid;    // = "xBTSAT_OTA";
+extern const char *password;
 
 WebServer server(80);
 #include "ota_webpage.h"    //Load the webpage resource
@@ -47,11 +47,6 @@ int getchipID()
 
 void start_ota()
 {
-	if (ota_started == true)
-	{
-	ESP_LOGI("","OTA Already started");
-		return;
-	}
 	char ssid_2[15];
 	snprintf(ssid_2, sizeof(ssid_2), "xBTSAT_%d", getchipID());
 	ssid = ssid_2;
@@ -81,8 +76,11 @@ void start_ota()
 	          []()
 	          {
 		          server.sendHeader("Connection", "close");
-		          //server.send(200, "text/html", loginIndex);
-		          server.send(200, "text/html", serverIndex); //Always go diretly to upload page
+#ifdef REQUIRE_LOGIN
+		          server.send(200, "text/html", loginIndex);
+#else
+		          server.send(200, "text/html", serverIndex);    //Go diretly to upload page
+#endif
 	          });
 	server.on("/serverIndex", HTTP_GET,
 	          []()
@@ -132,7 +130,6 @@ void start_ota()
 		    }
 	    });
 	server.begin();
-	
 }
 
 TaskHandle_t Task_ota_handle;
@@ -148,8 +145,13 @@ void Task_ota(void *pvParameters)
 	}
 }
 
-void setup_ota(void)
+void setup_ota()
 {
+	if (ota_started == true)
+	{
+		ESP_LOGI("", "OTA Already started");
+		return;
+	}
 	xTaskCreatePinnedToCore(Task_ota,         /* Task function. */
 	                        "Task_ota",       /* name of task. */
 	                        16384,            /* Stack size of task */

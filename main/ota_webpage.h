@@ -11,6 +11,7 @@
 
 #pragma once
 #include <Arduino.h>
+#include <config.h>
 
 /*	jquery.min.js version 3.2.1 - Contribution from https://esp32.com/viewtopic.php?t=11744
 
@@ -1075,16 +1076,16 @@ String style =
 /* Login page */
 String loginIndex =
     "<form name=loginForm>"
-    "<h1>ESP32 Login</h1>"
-    "<input name=userid placeholder='User ID'> "
-    "<input name=pwd placeholder=Password type=Password> "
+    "<h1>Atualizador de firmware SIMOVA</h1>"
+    "<input name=userid placeholder='usuario'> "
+    "<input name=pwd placeholder=senha type=Password> "
     "<input type=submit onclick=check(this.form) class=btn value=Login></form>"
     "<script>"
     "function check(form) {"
-    "if(form.userid.value=='admin' && form.pwd.value=='admin')"
+    "if(form.userid.value=='" PAGE_USERNAME"' && form.pwd.value=='" PAGE_PSWD"')"
     "{window.open('/serverIndex')}"
     "else"
-    "{alert('Error Password or Username')}"
+    "{alert('Erro usuario ou senha incorreto')}"
     "}"
     "</script>" +
     style;

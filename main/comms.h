@@ -1,92 +1,43 @@
 /**
- * @file main.c
- * @author Italo Soares (italo.soares@simova.com.br / italocjs@live.com)
- * @brief Example and development settings. no specific usage intended
- * @version 1.2
- * @date
- * 2023-05-01 22:36:03 - Begin of date keeping.
- * 2023-05-01 22:36:11 - Adding AT commands
+ * @file comms.h
+ * @author Italo Soares (italocjs@live.com)
+ * @brief
+ * @version 0.1
+ * @date 2023-05-15
  *
  * @copyright Copyright (c) 2023
- * tasks: echo_task
+ *
  */
 
-char firmware_version[] = "V1.4";
-int current_baud_rate;
-int system_status = -1;                 //-1 = error, 0 = ok but not connected, 1 = connected
-
-#define DEFAULT_UART2_BAUD_RATE 9600    // if the NVS is clean, which
-#define ITALO_TAG ""
-
-// command processor stuff
-#define COMMAND_PROCESSOR_BUFFER_SIZE 10    // how many messages can be stored in the buffer for processing. 10 is already overkill
-#define COMMAND_PROCESSOR_SPEED_MS 1        // How fast will the command_processor read the buffer
-#define ENABLE_AT_PROTOCOL_SUPPORT
-// #define DEBUG_COMMAND_PROCESSOR
-//#define LOG_LOCAL_LEVEL ESP_LOG_WARN
-#define LOG_LOCAL_LEVEL ESP_LOG_INFO
-#include "esp_log.h"
-
-#ifdef ARDUINO_ARCH_ESP32
-#include "esp32-hal-log.h"
-#endif
+#pragma once
+#include "config.h"
+extern int current_baud_rate;
+extern int system_status;
 
 #include "Arduino.h"
-
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/queue.h>
-
 #include <Preferences.h>
 #include <nvs_flash.h>
 #include "esp_log.h"
-Preferences preferences;
-
 #include "BluetoothSerial.h"    // Bluetooth main lib
+Preferences preferences;
 BluetoothSerial SerialBT;
-
 TaskHandle_t Handle_task_cmd_processor = NULL;
 QueueHandle_t queue_uart;
 QueueHandle_t queue_bluetooth;
 
-typedef enum command_source_t
-{
-	NONE,
-	SERIAL0,
-	SERIAL1,
-	BLUETOOTH,
-} command_source;
+String AT_CAPABILITIES =
+    "AT+? - Exibe ajuda\r\n"
+    "AT+HELP - Exibe ajuda\r\n"
+    "AT+BAUD - Responde a velocidade atual\r\n"
+    "AT+BAUD=9600 - Define a nova velocidade\r\n"
+    "AT+VER - Responde a versao de firmware\r\n"
+    "AT+RESET - Restaura todas as configuracoes\r\n"
+    "AT+OTA - Ativa o Wifi para atualizacao OTA\r\n";
 
-bool setup_nvs()
-{
-	delay(10);
-	nvs_flash_init();
-	if (preferences.begin("SYSTEM", false) == false)
-	{
-		ESP_LOGE("", "NVS failed to initialize");
-		preferences.end();
-		return false;
-	}
-
-	if (preferences.isKey("first_setup"))
-	{
-		//
-	}
-	else
-	{
-		ESP_LOGI("", "First setup, creating NVS first_setup=true on SYSTEM");
-		preferences.putBool("first_setup", true);
-	}
-	preferences.end();
-	return true;
-}
-
-void command_AT_BAUD(String data, command_source source)
-{
-	ESP_LOGI("", "RUNNING AT+BAUD");
-	SerialBT.printf("AT+OK - Current baud is %d", current_baud_rate);
-}
-void command_ATE_BAUD(String data, command_source source)
+void command_ATE_BAUD(String data)
 {
 	ESP_LOGI("", "RUNNING AT+BAUD=");
 	int start_pos = data.indexOf('=');
@@ -94,7 +45,8 @@ void command_ATE_BAUD(String data, command_source source)
 
 	if (new_baud_rate < 100 || new_baud_rate > 250000)
 	{
-		SerialBT.print("AT+BAUD= ERROR.  Value must be between 100 bps and 250000bps");
+		// SerialBT.print("AT+BAUD= ERROR.  Value must be between 100 bps and 250000bps");
+		SerialBT.print("AT+BAUD= ERROR.  Valor deve ser entre 100 e 250000bps");
 		return;
 	}
 	current_baud_rate = new_baud_rate;
@@ -106,34 +58,16 @@ void command_ATE_BAUD(String data, command_source source)
 		preferences.putInt("uart_speed", new_baud_rate);
 		current_baud_rate = preferences.getInt("uart_speed", new_baud_rate);
 		preferences.end();
-		SerialBT.printf("AT+OK - new baud is %d, Saved to memory", current_baud_rate);
+		// SerialBT.printf("AT+OK - new baud is %d, Saved to memory", current_baud_rate);
+		SerialBT.printf("AT+OK - Nova velocidade: %d, Salvo na memoria", current_baud_rate);
 		ESP_LOGI("", "AT+OK - new baud is %d, Saved to memory", current_baud_rate);
 	}
 	else
 	{
-		SerialBT.printf("AT+FAILED - new baud is %d, but failed to save to memory", current_baud_rate);
+		SerialBT.printf("AT+FAILED - Nova velocidade: %d, Falha ao salvar na memoria", current_baud_rate);
 		ESP_LOGE("", "AT+FAILED - new baud is %d, but failed to save to memory", current_baud_rate);
 	}
 }
-void command_AT_VER(String data, command_source source)
-{
-	ESP_LOGI("", "RUNNING AT+VER");
-	SerialBT.printf("AT+OK - Version is %s", firmware_version);
-}
-void command_AT_RESET(String data, command_source source)
-{
-	ESP_LOGI("", "RUNNING AT+RESET");
-	nvs_flash_erase();
-	SerialBT.print("AT+OK - Memory reseted, Restarting in 5s");
-	xTaskCreatePinnedToCore(TASK_RestartHelper,    /* Task function. */
-	                        "TASK_RestartHelper",  /* name of task. */
-	                        2400,                  /* Stack size of task */
-	                        NULL,                  /* parameter of the task */
-	                        1,                     /* priority of the task */
-	                        &Handle_RestartHelper, /* Task handle to keep track of created task */
-	                        1);
-}
-
 
 TaskHandle_t Handle_RestartHelper;
 // Auxiliary task to reboot ESP32, its a workaround to allow log messages to run before the ESP kills itself
@@ -148,6 +82,20 @@ void TASK_RestartHelper(void *pvParameters)
 	}
 }
 
+void command_AT_RESET()
+{
+	ESP_LOGI("", "RUNNING AT+RESET");
+	nvs_flash_erase();
+	SerialBT.println("AT+OK - Reiniciando para os padroes de fabrica em 5 segundos");
+	xTaskCreatePinnedToCore(TASK_RestartHelper,    /* Task function. */
+	                        "TASK_RestartHelper",  /* name of task. */
+	                        2400,                  /* Stack size of task */
+	                        NULL,                  /* parameter of the task */
+	                        1,                     /* priority of the task */
+	                        &Handle_RestartHelper, /* Task handle to keep track of created task */
+	                        1);
+}
+
 /**
  * @brief Check a given string for any AT commands, if valid then process the command.
  *
@@ -157,43 +105,55 @@ void TASK_RestartHelper(void *pvParameters)
  * @param source cmd_src_t , Where is the data coming from? (useful for responding)
  * @return true if any command was processed, false if no correspondence was found
  */
-bool process_at_protocol(char *input_buffer, command_source source)
+bool process_at_protocol(char *input_buffer)
 {
-	String inData = input_buffer;
+	String inData = "";
+	inData = input_buffer;
 	inData.toUpperCase();               // makes sure that even if the command was typed in lower-case it will be processed
 
 	if (inData.indexOf("AT+") == -1)    // if command is NOT an AT
 	{
 		return false;
 	}
-z	/* #region System protocol (AT+COMMANDS) */
+	/* #region System protocol (AT+COMMANDS) */
 	else if (inData.indexOf("AT+BAUD=") != -1)
 	{
 		ESP_LOGI("", "AT+BAUD=");
-		command_ATE_BAUD(inData, source);
+		command_ATE_BAUD(inData);
 		return true;
 	}
 	else if (inData.indexOf("AT+BAUD") != -1)
 	{
-		ESP_LOGI("", "AT+BAUD");
-		command_AT_BAUD(inData, source);
+		SerialBT.printf("AT+OK - Velocidade atual: %d", current_baud_rate);
 		return true;
 	}
 	else if (inData.indexOf("AT+RESET") != -1)
 	{
 		ESP_LOGI("", "AT+RESET");
-		command_AT_RESET(inData, source);
+		command_AT_RESET();
 		return true;
 	}
 	else if (inData.indexOf("AT+VER") != -1)
 	{
-		ESP_LOGI("", "AT+VER");
-		command_AT_VER(inData, source);
+		SerialBT.printf("AT+OK - Firwmare atual: %s", FIRMWARE_VERSION);
+		return true;
+	}
+	else if (inData.indexOf("AT+OTA") != -1)
+	{
+		ESP_LOGI("", "AT+OTA");
+		setup_ota();
+		SerialBT.print("AT+OTA - Wifi ativado, conecte-se a 192.128.1.1 para atualizar o firmware\r\n");
+		return true;
+	}
+	else if ((inData.indexOf("AT+?") != -1) || (inData.indexOf("AT+HELP") != -1))
+	{
+		SerialBT.print(AT_CAPABILITIES);
 		return true;
 	}
 	else    // Was an AT, but unknown
 	{
 		SerialBT.print("AT+ERROR Unknown command");
+		SerialBT.print(AT_CAPABILITIES);
 	}
 	/* #endregion */
 	return false;    // If no command match was found, return false
@@ -202,21 +162,18 @@ z	/* #region System protocol (AT+COMMANDS) */
 void task_cmd_processor(void *arg)
 {
 	char rxbuff[256];
-	// bool command_waiting = false;
-	command_source source;
 	while (1)
 	{
 		// ========================= GET THE BUFFER DATA =================================
 		if (xQueueReceive(queue_bluetooth, &(rxbuff), (TickType_t)pdMS_TO_TICKS(COMMAND_PROCESSOR_SPEED_MS)))
 		{
-			source = BLUETOOTH;
 #ifdef DEBUG_COMMAND_PROCESSOR
 			ESP_LOGI("", "Incoming queue_bluetooth ===  %s", rxbuff);
 #endif
 
 			// ========================= TRY TO PROCESS COMMANDS =================================
 #ifdef ENABLE_AT_PROTOCOL_SUPPORT
-			if (process_at_protocol(rxbuff, source) == true)
+			if (process_at_protocol(rxbuff) == true)
 			{
 #ifdef DEBUG_COMMAND_PROCESSOR
 				ESP_LOGI("", "AT command processed");
@@ -235,18 +192,6 @@ void task_cmd_processor(void *arg)
 	vTaskDelay(pdMS_TO_TICKS(COMMAND_PROCESSOR_SPEED_MS));
 }
 
-int getchipID()
-{
-	uint32_t chipId = 0;
-	for (int i = 0; i < 17; i = i + 8)
-	{
-		chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
-	}
-	// char buf[20];
-	// snprintf(buf, sizeof(buf), "CHIP_ID=%d", chipId);
-	// Debug(buf, Debug_MPA, __func__, __LINE__);
-	return chipId;
-}
 /**
  * @brief This callback will get any data coming from the bluetooth and put it into the command_processor queue.
  * this has to be as fast as possible to avoid bluetooth crash, so no processing, comparing or whatever here.
@@ -283,7 +228,7 @@ void setup_BT()
 	SerialBT.onData(callback_ESP_BT);
 	SerialBT.setTimeout(2000);
 	SerialBT.begin(btname);    // Bluetooth device name
-//SerialBT.enableSSP();
+	                           // SerialBT.enableSSP();
 	char _buf[60];
 	snprintf(_buf, sizeof(_buf), "[I] Bluetooth SPP started, SSID %s", btname);
 	ESP_LOGI("", "%s", _buf);
@@ -366,8 +311,6 @@ void setup_bt_workaround()
 	                        1);
 }
 
-#define BUF_SIZE (1024)
- 
 bool read_messages(String &inData, int timeout)
 {
 	bool TIMEOUT_EXPIRED = false;
@@ -405,7 +348,6 @@ bool read_messages(String &inData, int timeout)
 
 static void echo_task(void *arg)
 {
-	// uint8_t *data = (uint8_t *)malloc(BUF_SIZE);    // Configure a temporary buffer for the incoming data
 	while (1)
 	{
 		int len = Serial2.available();
@@ -427,92 +369,3 @@ static void echo_task(void *arg)
 }
 
 void setup_uart2_echo() { xTaskCreate(echo_task, "uart_echo_task", 2048, NULL, 10, NULL); }
-
-#define BLINK_GPIO GPIO_NUM_23
-TaskHandle_t Task_led_handle;    // Esse handle não funciona se estiver em outro contexto, utilizei a variavel booleana "Serial2InUse"
-// portMUX_TYPE myMutex2 = portMUX_INITIALIZER_UNLOCKED;
-void Task_LED(void *pvParameters)
-{
-	ESP_LOGI(ITALO_TAG, "Task_LED() started");
-
-	bool led_aceso = 0;
-	bool led_apagado = 1;
-	for (;;)
-	{
-		switch (system_status)
-		{
-			case -1:    // com problema, deve piscar 3x rapido e ficar apagado
-				gpio_set_level(BLINK_GPIO, led_aceso);
-				vTaskDelay(100 / portTICK_PERIOD_MS);
-				gpio_set_level(BLINK_GPIO, led_apagado);
-				vTaskDelay(250 / portTICK_PERIOD_MS);
-
-				gpio_set_level(BLINK_GPIO, led_aceso);
-				vTaskDelay(100 / portTICK_PERIOD_MS);
-				gpio_set_level(BLINK_GPIO, led_apagado);
-				vTaskDelay(250 / portTICK_PERIOD_MS);
-
-				gpio_set_level(BLINK_GPIO, led_aceso);
-				vTaskDelay(100 / portTICK_PERIOD_MS);
-				gpio_set_level(BLINK_GPIO, led_apagado);
-				vTaskDelay(250 / portTICK_PERIOD_MS);
-
-				gpio_set_level(BLINK_GPIO, led_apagado);
-				vTaskDelay(2000 / portTICK_PERIOD_MS);
-				break;
-			case 0:    // Não conectado, deve piscar rapido
-				gpio_set_level(BLINK_GPIO, led_aceso);
-				vTaskDelay(100 / portTICK_PERIOD_MS);
-				gpio_set_level(BLINK_GPIO, led_apagado);
-				vTaskDelay(100 / portTICK_PERIOD_MS);
-				break;
-			case 1:    // Conectado, deve piscar lento
-				gpio_set_level(BLINK_GPIO, led_aceso);
-				vTaskDelay(100 / portTICK_PERIOD_MS);
-				gpio_set_level(BLINK_GPIO, led_apagado);
-				vTaskDelay(200 / portTICK_PERIOD_MS);
-
-				gpio_set_level(BLINK_GPIO, led_aceso);
-				vTaskDelay(100 / portTICK_PERIOD_MS);
-				gpio_set_level(BLINK_GPIO, led_apagado);
-				vTaskDelay(200 / portTICK_PERIOD_MS);
-
-				gpio_set_level(BLINK_GPIO, led_apagado);
-				vTaskDelay(1400 / portTICK_PERIOD_MS);
-				break;
-		}
-	}
-}
-
-void setup_led_task()
-{
-	gpio_reset_pin(BLINK_GPIO);
-	/* Set the GPIO as a push/pull output */
-	gpio_set_direction(BLINK_GPIO, GPIO_MODE_OUTPUT);
-	gpio_set_level(BLINK_GPIO, 0);
-
-	xTaskCreatePinnedToCore(Task_LED,         /* Task function. */
-	                        "Task_LED",       /* name of task. */
-	                        2048,             /* Stack size of task */
-	                        NULL,             /* parameter of the task */
-	                        1,                /* priority of the task */
-	                        &Task_led_handle, /* Task handle to keep track of created task */
-	                        1);               /* pin task to core 0 */
-}
-
-extern "C" void app_main(void)
-{
-	Serial.begin(115200);    // Serial is always 115200, only used on the programming port and must be initialized fisrt to make sure every ESP_LOGx works
-	setup_nvs();
-	setup_UART();
-	setup_BT();
-	setup_bt_workaround();
-	setup_command_processor();
-	setup_uart2_echo();
-	setup_led_task();
-
-	char btname[15];
-	snprintf(btname, sizeof(btname), "xBTSAT_%d", getchipID());
-	Serial.printf("%s initialized - Version is %s, uart2 baud_rate is %d. Bluetooth SSP support is disabled!", btname, firmware_version, current_baud_rate);
-	system_status = 0;
-}

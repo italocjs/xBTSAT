@@ -1,6 +1,18 @@
 # xBTSAT - An TTL to Bluetooth transceiver, with AT commands and OTA 
 
-Supported commands:
+How to use OTA:
+    IP: 192.168.1.1
+    Username: admin
+    Password: admin
+
+
+VERY VERY VERY IMPORTANT, Always clean the project and full build before trusting the build bin file, for some reason its not really updated (esp idf 4.4.4)
+
+
+Como funciona:
+o Conversor xBTSAT cria uma conexão serial bluetooth com o nome xBTSAT_0000000, onde os 0000000 são um codigo em hexadecimal unico de cada chip.
+A conexão serve como uma ponte entre o bluetooth e a saida serial
+O Módulo suporta configuração via comandos AT:
     "AT+? - Exibe ajuda\r\n"
     "AT+HELP - Exibe ajuda\r\n"
     "AT+BAUD - Responde a velocidade atual\r\n"
@@ -9,11 +21,6 @@ Supported commands:
     "AT+RESET - Restaura todas as configuracoes\r\n"
     "AT+OTA - Ativa o Wifi para atualizacao OTA\r\n";
 
-    (for updated list use AT+HELP)
-
-How to use OTA:
-    IP: 192.168.1.1
-    Username: admin
-    Password: admin
-
-    
+Como usar o OTA
+1 - Conecte no Bluetooth e envie AT+OTA, voce deve receber uma mensagem confirmando que o OTA foi ativado.
+2 - Acesse em uma pagina o IP 192.
