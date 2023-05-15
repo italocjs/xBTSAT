@@ -2,28 +2,29 @@
  * @file main.c
  * @author Italo Soares (italo.soares@simova.com.br / italocjs@live.com)
  * @brief Example and development settings. no specific usage intended
- * @version Firmware v1.3 RELEASED ON 08/05/2023
+ * @version 1.2
  * @date
  * 2023-05-01 22:36:03 - Begin of date keeping.
  * 2023-05-01 22:36:11 - Adding AT commands
- * 2023-05-08 00:13:52 - Last review, code has been published to 40 xBTSAT.
  *
  * @copyright Copyright (c) 2023
  * tasks: echo_task
  */
 
-char firmware_version[] = "V1.3.0";
+char firmware_version[] = "V1.4";
 int current_baud_rate;
 int system_status = -1;                 //-1 = error, 0 = ok but not connected, 1 = connected
 
 #define DEFAULT_UART2_BAUD_RATE 9600    // if the NVS is clean, which
+#define ITALO_TAG ""
 
 // command processor stuff
 #define COMMAND_PROCESSOR_BUFFER_SIZE 10    // how many messages can be stored in the buffer for processing. 10 is already overkill
 #define COMMAND_PROCESSOR_SPEED_MS 1        // How fast will the command_processor read the buffer
 #define ENABLE_AT_PROTOCOL_SUPPORT
 // #define DEBUG_COMMAND_PROCESSOR
-#define LOG_LOCAL_LEVEL ESP_LOG_WARN
+//#define LOG_LOCAL_LEVEL ESP_LOG_WARN
+#define LOG_LOCAL_LEVEL ESP_LOG_INFO
 #include "esp_log.h"
 
 #ifdef ARDUINO_ARCH_ESP32
@@ -167,7 +168,7 @@ bool process_at_protocol(char *input_buffer, command_source source)
 	{
 		return false;
 	}
-	/* #region System protocol (AT+COMMANDS) */
+z	/* #region System protocol (AT+COMMANDS) */
 	else if (inData.indexOf("AT+BAUD=") != -1)
 	{
 		ESP_LOGI("", "AT+BAUD=");
@@ -284,6 +285,7 @@ void setup_BT()
 	SerialBT.onData(callback_ESP_BT);
 	SerialBT.setTimeout(2000);
 	SerialBT.begin(btname);    // Bluetooth device name
+//SerialBT.enableSSP();
 	char _buf[60];
 	snprintf(_buf, sizeof(_buf), "[I] Bluetooth SPP started, SSID %s", btname);
 	ESP_LOGI("", "%s", _buf);
@@ -367,7 +369,7 @@ void setup_bt_workaround()
 }
 
 #define BUF_SIZE (1024)
-
+ 
 bool read_messages(String &inData, int timeout)
 {
 	bool TIMEOUT_EXPIRED = false;
@@ -513,6 +515,6 @@ extern "C" void app_main(void)
 
 	char btname[15];
 	snprintf(btname, sizeof(btname), "xBTSAT_%d", getchipID());
-	Serial.printf("%s initialized - Version is %s, uart2 baud_rate is %d", btname, firmware_version, current_baud_rate);
+	Serial.printf("%s initialized - Version is %s, uart2 baud_rate is %d. Bluetooth SSP support is disabled!", btname, firmware_version, current_baud_rate);
 	system_status = 0;
 }
