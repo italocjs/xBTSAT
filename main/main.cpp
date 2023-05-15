@@ -11,6 +11,10 @@
  * tasks: echo_task
  */
 
+
+void onJavaScript(void);
+void setup_ota();
+
 /* #region Includes and version */
 char firmware_version[] = "V1.4";
 int current_baud_rate;
@@ -85,10 +89,20 @@ bool setup_nvs()
 	return true;
 }
 
+String AT_CAPABILITIES =
+    "AT+? - Exibe ajuda\r\n"
+    "AT+HELP - Exibe ajuda\r\n"
+    "AT+BAUD - Responde a velocidade atual\r\n"
+    "AT+BAUD=9600 - Define a nova velocidade\r\n"
+    "AT+VER - Responde a versao de firmware\r\n"
+    "AT+RESET - Restaura todas as configuracoes\r\n"
+    "AT+OTA - Ativa o Wifi para atualizacao OTA\r\n";
+    
 void command_AT_BAUD(String data, command_source source)
 {
 	ESP_LOGI("", "RUNNING AT+BAUD");
-	SerialBT.printf("AT+OK - Current baud is %d", current_baud_rate);
+	// SerialBT.printf("AT+OK - Current baud is %d", current_baud_rate);
+	SerialBT.printf("AT+OK - Velocidade atual: %d", current_baud_rate);
 }
 
 void command_ATE_BAUD(String data, command_source source)
@@ -99,7 +113,8 @@ void command_ATE_BAUD(String data, command_source source)
 
 	if (new_baud_rate < 100 || new_baud_rate > 250000)
 	{
-		SerialBT.print("AT+BAUD= ERROR.  Value must be between 100 bps and 250000bps");
+		//SerialBT.print("AT+BAUD= ERROR.  Value must be between 100 bps and 250000bps");
+        SerialBT.print("AT+BAUD= ERROR.  Valor deve ser entre 100 e 250000bps");
 		return;
 	}
 	current_baud_rate = new_baud_rate;
@@ -111,20 +126,34 @@ void command_ATE_BAUD(String data, command_source source)
 		preferences.putInt("uart_speed", new_baud_rate);
 		current_baud_rate = preferences.getInt("uart_speed", new_baud_rate);
 		preferences.end();
-		SerialBT.printf("AT+OK - new baud is %d, Saved to memory", current_baud_rate);
+		// SerialBT.printf("AT+OK - new baud is %d, Saved to memory", current_baud_rate);
+		SerialBT.printf("AT+OK - Nova velocidade: %d, Salvo na memoria", current_baud_rate);
 		ESP_LOGI("", "AT+OK - new baud is %d, Saved to memory", current_baud_rate);
 	}
 	else
 	{
-		SerialBT.printf("AT+FAILED - new baud is %d, but failed to save to memory", current_baud_rate);
+		SerialBT.printf("AT+FAILED - Nova velocidade: %d, Falha ao salvar na memoria", current_baud_rate);
 		ESP_LOGE("", "AT+FAILED - new baud is %d, but failed to save to memory", current_baud_rate);
 	}
+}
+
+void command_AT_HELP(String data, command_source source)
+{
+	ESP_LOGI("", "RUNNING AT+HELP");
+	SerialBT.print(AT_CAPABILITIES);
+}
+
+void command_AT_OTA(String data, command_source source)
+{
+	ESP_LOGI("", "RUNNING AT+OTA");
+    setup_ota();
+	SerialBT.print("AT+OTA - Wifi ativado, conecte-se a 192.128.1.1 para atualizar o firmware\r\n");
 }
 
 void command_AT_VER(String data, command_source source)
 {
 	ESP_LOGI("", "RUNNING AT+VER");
-	SerialBT.printf("AT+OK - Version is %s", firmware_version);
+	SerialBT.printf("AT+OK - Firwmare atual: %s", firmware_version);
 }
 
 TaskHandle_t Handle_RestartHelper;
@@ -195,6 +224,18 @@ bool process_at_protocol(char *input_buffer, command_source source)
 	{
 		ESP_LOGI("", "AT+VER");
 		command_AT_VER(inData, source);
+		return true;
+	}
+	else if ((inData.indexOf("AT+?") != -1) || (inData.indexOf("AT+HELP") != -1))
+	{
+		ESP_LOGI("", "AT+? or AT+HELP");
+		command_AT_HELP(inData,source);
+		return true;
+	}
+	else if (inData.indexOf("AT+OTA") != -1)
+	{
+		ESP_LOGI("", "AT+OTA");
+		command_AT_OTA(inData, source);
 		return true;
 	}
 	else    // Was an AT, but unknown
@@ -511,14 +552,17 @@ void setup_led_task()
 /* #region OTA Functions */
 
 #include <WiFi.h>
+// #include "components\arduino\libraries\WiFi\src\WiFi.h"
 #include <WiFiClient.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
 #include <Update.h>
 
+// #include "components\arduino\libraries\"
+
 const char *host = "esp32";
-const char *ssid = "ADD_WANTED_SSID_HERE";
-const char *password = "ADD_WANTED_PASSWORD_HERE";
+const char *ssid = "btsat";
+const char *password = "12345678";
 
 WebServer server(80);
 
@@ -1771,20 +1815,26 @@ void setup_ota(void)
 
 	xTaskCreatePinnedToCore(Task_ota,         /* Task function. */
 	                        "Task_ota",       /* name of task. */
-	                        2048,             /* Stack size of task */
+	                        16384,            /* Stack size of task */
 	                        NULL,             /* parameter of the task */
 	                        1,                /* priority of the task */
 	                        &Task_ota_handle, /* Task handle to keep track of created task */
 	                        1);               /* pin task to core 0 */
+
+	ESP_LOGI("", "OTA STARTED, WIFI PSWD = 12345678,  IP 192.168.1.1, admin admin");
 }
 
 /* #endregion */
+
+
 
 extern "C" void app_main(void)
 {
 	Serial.begin(115200);    // Serial is always 115200, only used on the programming port and must be initialized fisrt to make sure every ESP_LOGx works
 	setup_nvs();
 	setup_UART();
+	//setup_ota();
+
 	setup_BT();
 	setup_bt_workaround();
 	setup_command_processor();
@@ -1793,8 +1843,8 @@ extern "C" void app_main(void)
 
 	char btname[15];
 	snprintf(btname, sizeof(btname), "xBTSAT_%d", getchipID());
-	Serial.printf("%s initialized - Version is %s, uart2 baud_rate is %d. Bluetooth SSP support is disabled!", btname, firmware_version, current_baud_rate);
+	Serial.printf("%s initialized - Version is %s, uart2 baud_rate is %d\r\n", btname, firmware_version, current_baud_rate);
+	Serial.printf("Bluetooth SSP disabled, WIFI OTA Supported!\r\n", btname, firmware_version, current_baud_rate);
+    Serial.print(AT_CAPABILITIES);
 	system_status = 0;
-
-	setup_ota();
 }
