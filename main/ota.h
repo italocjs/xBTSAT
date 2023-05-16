@@ -4,9 +4,8 @@
  * @brief Code needed for the WIFI OTA capability.
  * @version 1.4
  * @date 2023-05-15
- *
+ * 2023-05-16 12:20:51 code cleanup and released as V1.4
  * @copyright Copyright (c) 2023
- *
  */
 #pragma once
 

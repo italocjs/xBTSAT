@@ -2,13 +2,13 @@
  * @file main.c
  * @author Italo Soares (italo.soares@simova.com.br / italocjs@live.com)
  * @brief Example and development settings. no specific usage intended
- * @version 1.4.5
+ * @version 1.4
  * @date
  * 2023-05-01 22:36:03 - Begin of date keeping.
  * 2023-05-01 22:36:11 - Adding AT commands
- *
+ * 2023-05-16 11:39:04 - Main cleaned up, moved functions to separated files
+ * 2023-05-16 11:39:16 - code cleanup and released as V1.4
  * @copyright Copyright (c) 2023
- * tasks: echo_task
  */
 
 int current_baud_rate;

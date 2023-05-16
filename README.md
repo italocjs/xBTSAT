@@ -23,4 +23,8 @@ O Módulo suporta configuração via comandos AT:
 
 Como usar o OTA
 1 - Conecte no Bluetooth e envie AT+OTA, voce deve receber uma mensagem confirmando que o OTA foi ativado.
-2 - Acesse em uma pagina o IP 192.
+2 - Acesse em uma pagina o IP 192.168.1.1 ou digite simova.local
+3 - Usuario simova, senha simova
+4 - Escolha o novo firmware
+5 - Clique no botão UPLOAD
+6 - Conecte no bluetooth e envie AT+VER para conferir se o firmware foi atualizado

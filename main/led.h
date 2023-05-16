@@ -4,14 +4,15 @@
  * @brief
  * @version 0.1
  * @date 2023-05-15
- *
+ * 2023-05-16 11:37:45 code cleanup and released as V1.4
  * @copyright Copyright (c) 2023
- *
  */
 
 #pragma once
 #include <Arduino.h>
 #include <config.h>
+
+extern int system_status;
 
 TaskHandle_t Task_led_handle;
 void Task_LED(void *pvParameters)

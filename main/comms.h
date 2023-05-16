@@ -2,11 +2,10 @@
  * @file comms.h
  * @author Italo Soares (italocjs@live.com)
  * @brief
- * @version 0.1
+ * @version 1.4
  * @date 2023-05-15
- *
+ * 2023-05-16 11:34:22 code cleanup and released as V1.4
  * @copyright Copyright (c) 2023
- *
  */
 
 #pragma once
@@ -21,7 +20,7 @@ extern int system_status;
 #include <Preferences.h>
 #include <nvs_flash.h>
 #include "esp_log.h"
-#include "BluetoothSerial.h"    // Bluetooth main lib
+#include "BluetoothSerial.h" 
 Preferences preferences;
 BluetoothSerial SerialBT;
 TaskHandle_t Handle_task_cmd_processor = NULL;

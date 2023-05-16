@@ -1,12 +1,13 @@
 /**
  * @file ota_webpage.h
  * @author Italo Soares (italocjs@live.com)
- * @brief
- * @version 0.1
+ * @brief Webpage content
+ * @version 1.4
  * @date 2023-05-15
- *
+ * 2023-05-16 11:42:09 Translated buttons to portuguese,
+ *                      added more detail about current firmware and compile date.
+ *                      code cleanup and released as V1.4
  * @copyright Copyright (c) 2023
- *
  */
 
 #pragma once
@@ -1082,7 +1083,8 @@ String loginIndex =
     "<input type=submit onclick=check(this.form) class=btn value=Login></form>"
     "<script>"
     "function check(form) {"
-    "if(form.userid.value=='" PAGE_USERNAME"' && form.pwd.value=='" PAGE_PSWD"')"
+    "if(form.userid.value=='" PAGE_USERNAME "' && form.pwd.value=='" PAGE_PSWD
+    "')"
     "{window.open('/serverIndex')}"
     "else"
     "{alert('Erro usuario ou senha incorreto')}"
@@ -1090,12 +1092,13 @@ String loginIndex =
     "</script>" +
     style;
 
-
-
 /* Server Index Page */
 String serverIndex =
     "<font color = \"#000000\"><h1><center>Atualizador de firmware SIMOVA</center></h1>"
-    "<body><center>Cuidado, uso de firmwares incorretos pode DESTRUIR o aparelho</center></body>"
+    "<h2></h2>"
+    "<body><center>Atencao, uso de firmwares incorretos pode danificar o aparelho</center></body>"
+    "<body><center>Firmware atual: " FIRMWARE_VERSION "</center></body>"
+    "<body><center>Compilado em: " COMPILE_DATE" " COMPILE_TIME"</center></body>"
     "<h2></h2>"
     "<script src='/jquery.min.js'></script>"
     "<form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>"
