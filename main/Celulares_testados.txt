@@ -25,5 +25,5 @@ Testados 15/05/23 com xBTSAT v1.4
 - g22
 - e13
 - E20
-
-Testados  com xBTSAT v1.4.4?
+- Galaxy TAB 8
+- Galaxy Tab Active 3
