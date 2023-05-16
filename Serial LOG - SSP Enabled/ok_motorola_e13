@@ -1,0 +1,335 @@
+Device brand       : Motorola    
+Device model       : E13 XT2345-1
+Android version    : 13
+Pairing            : OK 
+Serial connection  : OK   
+SSP Status         : Enabled
+Serial log: (Verbose enabled for Bluetooth):
+
+##### Boot start #####
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:7040
+load:0x40078000,len:17072
+load:0x40080400,len:4220
+0x40080400: _init at ??:?
+
+entry 0x400806e0
+I (27) boot: ESP-IDF v4.4.4 2nd stage bootloader
+I (27) boot: compile time 13:45:06
+I (27) boot: chip revision: v3.0
+I (30) boot_comm: chip revision: 3, min. bootloader chip revision: 0
+I (37) boot.esp32: SPI Speed      : 40MHz
+I (42) boot.esp32: SPI Mode       : DIO
+I (47) boot.esp32: SPI Flash Size : 4MB
+I (51) boot: Enabling RNG early entropy source...
+I (57) boot: Partition Table:
+I (60) boot: ## Label            Usage          Type ST Offset   Length
+I (67) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (75) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (82) boot:  2 factory          factory app      00 00 00010000 00100000
+I (90) boot: End of partition table
+I (94) boot_comm: chip revision: 3, min. application chip revision: 0
+I (101) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=28944h (166212) map
+I (169) esp_image: segment 1: paddr=0003896c vaddr=3ffbdb60 size=04880h ( 18560) load
+I (176) esp_image: segment 2: paddr=0003d1f4 vaddr=40080000 size=02e24h ( 11812) load
+I (181) esp_image: segment 3: paddr=00040020 vaddr=400d0020 size=7d770h (513904) map
+I (365) esp_image: segment 4: paddr=000bd798 vaddr=40082e24 size=15e1ch ( 89628) load
+I (418) boot: Loaded app from partition at offset 0x10000
+I (418) boot: Disabling RNG early entropy source...
+I (430) cpu_start: Pro cpu up.
+I (430) cpu_start: Starting app cpu, entry point is 0x4008142c
+0x4008142c: call_start_cpu1 at C:/Users/italo/esp/esp-idf/components/esp_system/port/cpu_start.c:148
+
+I (0) cpu_start: App cpu up.
+I (446) cpu_start: Pro cpu start user code
+I (446) cpu_start: cpu freq: 160000000
+I (446) cpu_start: Application information:
+I (450) cpu_start: Project name:     bt_spp_acceptor_demo
+I (457) cpu_start: App version:      1
+I (461) cpu_start: Compile time:     May 13 2023 13:44:35
+I (467) cpu_start: ELF file SHA256:  d8e61a488a768f9b...
+I (473) cpu_start: ESP-IDF:          v4.4.4
+I (478) heap_init: Initializing. RAM available for dynamic allocation:
+I (485) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM
+I (491) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM
+I (497) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM
+I (503) heap_init: At 3FFD43F0 len 0000BC10 (47 KiB): DRAM
+I (510) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM
+I (516) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM
+I (522) heap_init: At 40098C40 len 000073C0 (28 KiB): IRAM
+I (530) spi_flash: detected chip: generic
+I (533) spi_flash: flash io: dio
+I (539) cpu_start: Starting scheduler on [    49][I][main.cpp:323] setup_UART(): [] Read from nvs: uart_speed = 9600
+I (586) uart: queue free spaces: 20
+I (589) BTDM_INIT: BT controller compile version [8020d24]
+I (593) system_api: Base MAC address is not set
+I (597) system_api: read default base MAC address from EFUSE
+I (606) phy_init: phy_version 4670,719f9f6,Feb 18 2021,17:07:07
+I (1181) BT_BTM: btm_sec_set_security_level : sec: 0x0
+
+I (1181) BT_BTM: BTM_SEC_REG[0]: id 0, is_orig 0, psm 0x0001, proto_id 0, chan_id 0
+
+I (1185) BT_BTM:                : sec: 0x80, service name [Service Discovery] (up to 21 chars saved)
+
+I (1195) BT_BTM: btm_sec_set_security_level : sec: 0x0
+
+I (1201) BT_BTM: BTM_SEC_REG[0]: id 0, is_orig 1, psm 0x0001, proto_id 0, chan_id 0
+
+I (1209) BT_BTM:                : sec: 0x80, service name [Service Discovery] (up to 21 chars saved)
+
+I (1280) BT_BTM: BTM_SetPinType: pin type 0 [variable-0, fixed-1], code , length 0
+
+I (1281) BT_BTM: btm_sec_set_security_level : sec: 0x0
+
+I (1284) BT_BTM: BTM_SEC_REG[1]: id 42, is_orig 0, psm 0x0003, proto_id 3, chan_id 0
+
+I (1293) BT_BTM:                : sec: 0x80, service name [RFC_MUX
+] (up to 21 chars saved)
+
+I (1302) BT_BTM: BTM_SetInquiryMode
+
+I (1307) BT_BTM: BTM_SetPageScanType
+
+I (1312) BT_BTM: BTM_SetInquiryScanType
+
+I (1332) BT_BTM: BTM_SecAddDevice, link key type:0
+
+I (1333) BT_BTM: BTM_SecAddDevice, link key type:0
+
+I (1334) BT_BTM: BTM_SecAddDevice, link key type:0
+
+I (1339) BT_BTM: BTM_SecAddDevice, link key type:0
+
+I (1344) BT_BTM: BTM_SecAddDevice, link key type:4
+
+I (1350) BT_BTM: BTM_SecAddDevice, link key type:4
+
+I (1357) BT_BTM: Write Extended Inquiry Response to controller
+
+I (1363) BT_APPL: BTA_JvEnable
+[   832][I][BluetoothSerial.cpp:263] esp_spp_cb(): ESP_SPP_INIT_EVT
+[   838][I][BluetoothSerial.cpp:270] esp_spp_cb(): ESP_SPP_INIT_EVT: slave: start
+I (1381) BT_BTM: BTM_ReadDiscoverability
+
+I (1385) BT_BTM: BTM_ReadConnectability
+
+I (1390) BT_BTM: BTM_SetDiscoverability
+
+I (1395) BT_BTM: BTM_SetDiscoverability: mode 2 [NonDisc-0, Lim-1, Gen-2], window 0x0012, interval 0x0800
+
+I (1406) BT_BTM: BTM_SetConnectability
+
+I (1410) BT_BTM: BTM_SetConnectability: mode 1 [NonConn-0, Conn-1], window 0x0012, interval 0x0800
+
+I (1422) BT_APPL: BTA_JvGetChannelId
+I (1424) BT_APPL: BTA_JvCreateRecordByUser
+I (1430) BT_APPL: BTA_JvRfcommStartServer
+I (1434) BT_BTM: btm_sec_set_security_level : sec: 0x0
+
+I (1439) BT_BTM: BTM_SEC_REG[2]: id 55, is_orig 0, psm 0x0003, proto_id 3, chan_id 1
+
+I (1448) BT_BTM:                : sec: 0x80, service name [JV PORT] (up to 21 chars saved)
+
+I (1457) BT_RFCOMM: RFCOMM_CreateConnection()  BDA: ff-ff-ff-ff-ff-ff
+I (1464) BT_RFCOMM: RFCOMM_CreateConnection(): scn:1, dlci:2, is_server:1 mtu:990, p_mcb:0x0
+I (1474) BT_RFCOMM: RFCOMM_CreateConnection(): scn:1, dlci:2, is_server:1 mtu:990, p_mcb:0x0, p_port:0x3ffd308c
+I (1484) BT_RFCOMM: PORT_SetEventCallback() handle:2
+I (1490) BT_RFCOMM: PORT_SetEventMask() handle:2 mask:0x30005
+I (1496) BT_RFCOMM: PORT_GetState() handle:2
+I (1501) BT_RFCOMM: PORT_SetState() handle:2
+I (1506) BT_RFCOMM: PORT_SetState() handle:2 FC_TYPE:0xc
+[   977][I][BluetoothSerial.cpp:397] esp_spp_cb(): ESP_SPP_START_EVT
+[   984][I][BluetoothSerial.cpp:683] _init_bt(): device name set
+I (1527) BT_BTM: Write Extended Inquiry Response to controller
+
+[   999][I][BluetoothSerial.cpp:571] esp_bt_gap_cb(): ESP_BT_GAP_CONFIG_EIR_DATA_EVT: stat:0 num:4
+[  1008][I][main.cpp:291] setup_BT(): [] [I] Bluetooth SPP started, SSID xBTSAT_1148172
+[  1016][I][main.cpp:304] setup_command_processor(): [] Command_processor initialized
+[  1016][W][main.cpp:334] TASK_BT_RESET_HELPER(): [] started
+I (1560) gpio: GPIO[23]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 
+[  1040][I][main.cpp:438] Task_LED(): [] Task_LED() started
+xBTSAT_1148172 initialized - Version is V1.4, uart2 baud_rate is 9600
+
+##### Boot finished #####
+##### Pairing start #####
+
+E (20888) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+W (20894) BT_HCI: hcif conn complete: hdl 0x81, st 0x0
+I (20897) BT_BTM: BTM_InqDbRead: bd addr [e426d56c148e]
+
+E (20904) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+W (20908) BT_HCI: hcif link supv_to changed: hdl 0x81, supv_to 8000
+E (20912) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+W (20919) BT_HCI: hcif link supv_to changed: hdl 0x81, supv_to 8000
+E (20931) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (27680) BT_BTM: btm_sec_set_peer_sec_caps: sm4: 0x11, rmt_support_for_secure_connections 1
+
+I (27681) BT_BTM: btm_process_remote_ext_features: pend:0
+
+I (27691) BT_L2CAP: L2CA_SetDesireRole() new:x1, disallow_switch:0
+I (27797) BT_BTM: BTM_SetPowerMode: pm_id 128 BDA: d56c148e mode:0x0
+I (27799) BT_L2CAP: L2CAP - Calling Connect_Ind_Cb(), CID: 0x0040
+I (27801) BT_L2CAP: L2CA_ErtmConnectRsp()  CID: 0x0040  Result: 0  Status: 0  BDA: e426d56c148e  p_ertm_info:0x0
+E (27813) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (27819) BT_L2CAP: L2CA_ConfigReq()  CID 0x0040: fcr_present:0 (mode 0) mtu_present:1 (672)
+E (27829) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (27836) BT_L2CAP: L2CA_ConfigRsp()  CID: 0x0040  Result: 0 MTU present:0 Flush TO:0 FCR:0 FCS:0
+E (27846) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (27852) BT_L2CAP: L2CAP - Calling Config_Rsp_Cb(), CID: 0x0040
+I (27866) BT_L2CAP: L2CA_DataWrite()  CID: 0x0040  Len: 10
+I (27890) BT_BTM: BTM_SetPowerMode: pm_id 128 BDA: d56c148e mode:0x0
+I (27891) BT_L2CAP: L2CAP - Calling Disconnect_Ind_Cb(), CID: 0x0040  Conf Needed
+I (27895) BT_L2CAP: L2CA_DisconnectRsp()  CID: 0x0040
+E (27903) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (27940) BT_BTM: BTM_SetPowerMode: pm_id 128 BDA: d56c148e mode:0x0
+I (27942) BT_L2CAP: L2CAP - Calling Connect_Ind_Cb(), CID: 0x0041
+I (27944) BT_L2CAP: L2CA_ErtmConnectRsp()  CID: 0x0041  Result: 0  Status: 0  BDA: e426d56c148e  p_ertm_info:0x0
+I (27956) BT_L2CAP: L2CA_ConfigReq()  CID 0x0041: fcr_present:0 (mode 0) mtu_present:1 (672)
+E (27967) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (27972) BT_L2CAP: L2CA_ConfigRsp()  CID: 0x0041  Result: 0 MTU present:0 Flush TO:0 FCR:0 FCS:0
+E (27982) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (28002) BT_L2CAP: L2CAP - Calling Config_Rsp_Cb(), CID: 0x0041
+I (28005) BT_L2CAP: L2CA_DataWrite()  CID: 0x0041  Len: 81
+I (28058) BT_BTM: BTM_SetPowerMode: pm_id 128 BDA: d56c148e mode:0x0
+I (28059) BT_L2CAP: L2CAP - Calling Disconnect_Ind_Cb(), CID: 0x0041  Conf Needed
+I (28063) BT_L2CAP: L2CA_DisconnectRsp()  CID: 0x0041
+E (28070) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+W (32079) BT_HCI: hci cmd send: disconnect: hdl 0x81, rsn:0x13
+W (32177) BT_HCI: hcif disc complete: hdl 0x81, rsn 0x16
+I (32179) BT_L2CAP: L2CA_SetDesireRole() new:x1, disallow_switch:0
+
+##### Pairing end #####
+##### Connection to terminal app start #####
+
+E (114674) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+W (114680) BT_HCI: hcif conn complete: hdl 0x80, st 0x0
+I (114681) BT_BTM: BTM_InqDbRead: bd addr [e426d56c148e]
+
+E (114690) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+W (114691) BT_HCI: hcif link supv_to changed: hdl 0x80, supv_to 8000
+E (114699) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+E (114725) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (114748) BT_BTM: btm_sec_set_peer_sec_caps: sm4: 0x11, rmt_support_for_secure_connections 1
+
+I (114749) BT_BTM: btm_process_remote_ext_features: pend:0
+
+I (114759) BT_BTM: BTM_SetPowerMode: pm_id 128 BDA: d56c148e mode:0x0
+I (114762) BT_L2CAP: L2CAP - Calling Connect_Ind_Cb(), CID: 0x0040
+I (114768) BT_L2CAP: L2CA_ErtmConnectRsp()  CID: 0x0040  Result: 0  Status: 0  BDA: e426d56c148e  p_ertm_info
+
+
+                                                                                                            o:0x0
+I (114780) BT_L2CAP: L2CA_ConfigReq()  CID 0x0040: fcr_present:0 (mode 0) mtu_present:1 (672)
+E (114789) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (114796) BT_BTM: btm_sec_set_peer_sec_caps: sm4: 0x11, rmt_support_for_secure_connections 1
+
+I (114804) BT_BTM: btm_process_remote_ext_features: pend:0
+
+I (114815) BT_L2CAP: L2CA_SetDesireRole() new:x1, disallow_switch:0
+I (114819) BT_L2CAP: L2CA_ConfigRsp()  CID: 0x0040  Result: 0 MTU present:0 Flush TO:0 FCR:0 FCS:0
+E (114829) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (114835) BT_L2CAP: L2CAP - Calling Config_Rsp_Cb(), CID: 0x0040
+I (114842) BT_L2CAP: L2CA_SetDesireRole() new:x1, disallow_switch:0
+I (114851) BT_L2CAP: L2CA_DataWrite()  CID: 0x0040  Len: 81
+I (114880) BT_BTM: BTM_SetPowerMode: pm_id 128 BDA: d56c148e mode:0x0
+I (114881) BT_L2CAP: L2CAP - Calling Disconnect_Ind_Cb(), CID: 0x0040  Conf Needed
+I (114885) BT_L2CAP: L2CA_DisconnectRsp()  CID: 0x0040
+E (114893) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (115022) BT_BTM: BTM_SetPowerMode: pm_id 128 BDA: d56c148e mode:0x0
+E (115028) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (115041) BT_L2CAP: L2CAP - Calling Connect_Ind_Cb(), CID: 0x0041
+I (115043) BT_L2CAP: L2CA_ErtmConnectRsp()  CID: 0x0041  Result: 0  Status: 0  BDA: e426d56c148e  p_ertm_info:0x0
+E (115050) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (115055) BT_L2CAP: L2CA_ConfigReq()  CID 0x0041: fcr_present:0 (mode 0) mtu_present:1 (1691)
+E (115066) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (115122) BT_L2CAP: L2CA_ConfigRsp()  CID: 0x0041  Result: 0 MTU present:0 Flush TO:0 FCR:0 FCS:0
+E (115124) BT_OSI: osi_mem_dbg_clean full transmit_fragment 350 !!
+
+I (115128) BT_L2CAP: L2CAP - Calling Config_Rsp_Cb(), CID: 0x0041
+I (115168) BT_L2CAP: L2CA_DataWrite()  CID: 0x0041  Len: 4
+I (115194) BT_L2CAP: L2CA_DataWrite()  CID: 0x0041  Len: 14
+I (115223) BT_RFCOMM: PORT_CheckConnection() handle:2
+I (115225) BT_APPL: BTA_JVSetPmProfile handle:0x81, app_id:255
+E (115226) BT_APPL: bta_jv_add_rfc_port failed to create new listen port
+I (115233) BT_L2CAP: L2CA_DataWrite()  CID: 0x0041  Len: 4
+I (115241) BT_APPL: bta_jv_set_pm_profile(handle: 0x81, app_id: 255, init_st: 0)
+I (115247) BT_RFCOMM: PORT_CheckConnection() handle:2
+I (115253) BT_APPL: bta_jv_alloc_set_pm_profile_cb(handle 0x81, app_id 255): idx: 0, (BTA_JV_PM_MAX_NUM: 5), pp_cb: 0x3ffd2cfc
+I (115265) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 1, app_id: 255, conn_state: 0)
+I (115276) BT_L2CAP: L2CA_SetDesireRole() new:x1, disallow_switch:0
+W (115283) BT_APPL: new conn_srvc id:26, app_id:255
+I (115291) BT_L2CAP: L2CA_DataWrite()  CID: 0x0041  Len: 8
+I (115297) BT_L2CAP: L2CA_DataWrite()  CID: 0x0041  Len: 8
+[114768][I][BluetoothSerial.cpp:278] esp_spp_cb(): ESP_SPP_SRV_OPEN_EVT: 0
+
+##### Connection to terminal app end #####
+##### Sending data #####
+
+I (123395) BT_APPL: BTA_JvRfcommFlowControl
+I (123399) BT_APPL: credits given 2
+I (123432) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 1, app_id: 255, conn_state: 7)
+I (123434) BT_BTM: BTM_SetPowerMode: pm_id 0 BDA: d56c148e mode:0x0
+I (123441) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 2, app_id: 255, conn_state: 6)
+I (123454) BT_APPL: BTA_JvRfcommFlowControl
+I (123457) BT_APPL: credits given 1
+I (123462) BT_L2CAP: L2CA_DataWrite()  CID: 0x0041  Len: 5
+I (123597) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 1, app_id: 255, conn_state: 7)
+I (123599) BT_BTM: BTM_SetPowerMode: pm_id 0 BDA: d56c148e mode:0x0
+I (123606) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 2, app_id: 255, conn_state: 6)
+I (123618) BT_APPL: BTA_JvRfcommFlowControl
+I (123622) BT_APPL: credits given 1
+I (123747) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 1, app_id: 255, conn_state: 7)
+I (123749) BT_BTM: BTM_SetPowerMode: pm_id 0 BDA: d56c148e mode:0x0
+I (123756) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 2, app_id: 255, conn_state: 6)
+I (123768) BT_APPL: BTA_JvRfcommFlowControl
+I (123772) BT_APPL: credits given 1
+I (123886) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 1, app_id: 255, conn_state: 7)
+I (123888) BT_BTM: BTM_SetPowerMode: pm_id 0 BDA: d56c148e mode:0x0
+I (123895) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 2, app_id: 255, conn_state: 6)
+I (123907) BT_APPL: BTA_JvRfcommFlowControl
+I (123911) BT_APPL: credits given 1
+I (124014) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 1, app_id: 255, conn_state: 7)
+I (124015) BT_BTM: BTM_SetPowerMode: pm_id 0 BDA: d56c148e mode:0x0
+I (124022) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 2, app_id: 255, conn_state: 6)
+I (124035) BT_APPL: BTA_JvRfcommFlowControl
+I (124038) BT_APPL: credits given 1
+I (124130) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 1, app_id: 255, conn_state: 7)
+I (124132) BT_BTM: BTM_SetPowerMode: pm_id 0 BDA: d56c148e mode:0x0
+I (124139) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 2, app_id: 255, conn_state: 6)
+I (124151) BT_APPL: BTA_JvRfcommFlowControl
+I (124155) BT_APPL: credits given 1
+I (124242) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 1, app_id: 255, conn_state: 7)
+I (124244) BT_BTM: BTM_SetPowerMode: pm_id 0 BDA: d56c148e mode:0x0
+I (124251) BT_APPL: bta_jv_pm_state_change(p_cb: 0x3ffd2dcc, handle: 0x81, busy/idle_state: 2, app_id: 255, conn_state: 6)
+I (124263) BT_APPL: BTA_JvRfcommFlowControl
+I (124267) BT_APPL: credits given 1
+I (124272) BT_L2CAP: L2CA_DataWrite()  CID: 0x0041  Len: 5
+W (129245) BT_HCI: hcif mode change: hdl 0x80, mode 2, intv 792, status 0x0
+[128712][I][BluetoothSerial.cpp:583] esp_bt_gap_cb(): ESP_BT_GAP_MODE_CHG_EVT: mode: 2
+
+##### End of log, all OK #####

@@ -12,3 +12,18 @@ Reportado problema:
     - MOTO E7
     - E6 Play
     - A03 core
+
+
+Testados com xBTSAT v1.3
+- G20
+- g22
+- e13
+- E20 (deu pau no v1.3)
+
+Testados 15/05/23 com xBTSAT v1.4
+- G20
+- g22
+- e13
+- E20
+
+Testados  com xBTSAT v1.4.4?
