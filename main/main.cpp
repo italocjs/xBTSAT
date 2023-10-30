@@ -2,8 +2,9 @@
  * @file main.c
  * @author Italo Soares (italo.soares@simova.com.br / italocjs@live.com)
  * @brief Example and development settings. no specific usage intended
- * @version 1.4
+ * @version 1.5
  * @date
+ * 2023-10-30 14:56:11 - Addded watchdog task to prevent freezes
  * 2023-05-01 22:36:03 - Begin of date keeping.
  * 2023-05-01 22:36:11 - Adding AT commands
  * 2023-05-16 11:39:04 - Main cleaned up, moved functions to separated files
@@ -17,9 +18,27 @@ int system_status = -1;    //-1 = error, 0 = ok but not connected, 1 = connected
 #include "ota.h"
 #include "comms.h"
 #include "led.h"
+#include <esp_task_wdt.h>
+
+void setup_watchdog_task()
+{
+	xTaskCreatePinnedToCore(watchdog_task, "watchdog_task", 2048, NULL, 1, NULL, 1);
+}
+
+static void watchdog_task(void *pvParameters)
+{
+	esp_task_wdt_init(10, true);    // Set a 10-second timeout, and enable panic so ESP32 restarts, used to prevent freezes where the ESP doesnt reboot automatically
+	ESP_LOGI("watchdog_task", "Watchdog task started")
+	while (1)
+	{
+		esp_task_wdt_reset();
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
+	}
+}
 
 extern "C" void app_main(void)
 {
+	setup_watchdog_task();
 	Serial.begin(115200);    // Serial is always 115200, only used on the programming port and must be initialized fisrt to make sure every ESP_LOGx works
 	nvs_flash_init();
 	setup_UART();

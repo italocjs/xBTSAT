@@ -10,7 +10,7 @@
 #pragma once
 
 // FIRMWARE VERSION
-#define FIRMWARE_VERSION "xbtsat_v1_4_0"
+#define FIRMWARE_VERSION "xbtsat_v1_5_0"
 #define COMPILE_DATE __DATE__
 #define COMPILE_TIME __TIME__
 
