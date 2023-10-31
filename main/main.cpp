@@ -20,21 +20,22 @@ int system_status = -1;    //-1 = error, 0 = ok but not connected, 1 = connected
 #include "led.h"
 #include <esp_task_wdt.h>
 
-void setup_watchdog_task()
-{
-	xTaskCreatePinnedToCore(watchdog_task, "watchdog_task", 2048, NULL, 1, NULL, 1);
-}
-
 static void watchdog_task(void *pvParameters)
 {
 	esp_task_wdt_init(10, true);    // Set a 10-second timeout, and enable panic so ESP32 restarts, used to prevent freezes where the ESP doesnt reboot automatically
-	ESP_LOGI("watchdog_task", "Watchdog task started")
+	ESP_LOGI("watchdog_task", "Watchdog task started");
 	while (1)
 	{
 		esp_task_wdt_reset();
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
 	}
 }
+
+void setup_watchdog_task()
+{
+	xTaskCreatePinnedToCore(watchdog_task, "watchdog_task", 2048, NULL, 1, NULL, 1);
+}
+
 
 extern "C" void app_main(void)
 {
@@ -58,6 +59,7 @@ extern "C" void app_main(void)
 	Serial.printf("Firmware: %s | Compile date: %s %s\r\n", FIRMWARE_VERSION, COMPILE_DATE, COMPILE_TIME);
 	Serial.printf("Baud Rate is %d, BT SSID: %s, PIN 1234\r\n", current_baud_rate, btname);
 	Serial.printf("Bluetooth SSP disabled, WIFI OTA Supported!\r\n");
+	Serial.printf("Warning, only use approved firmware to avoid damaging the device\r\n");
 	Serial.print(AT_CAPABILITIES);
 	system_status = 0;
 }
